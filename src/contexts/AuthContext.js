@@ -16,6 +16,10 @@ export function AuthProvider({ children }) {
     //state of user
     const [currentUser, setCurrentUser] = useState();
 
+    //loading state, defaults true, as Firebase will undergo verification(loading) when page first loads
+    //'loading' acts as a flag whether to render AuthContex.Provider's children or not
+    const [loading, setLoading] = useState(true);
+
     //sign up function
     function signup(email, password) {
         return createUserWithEmailAndPassword(auth, email, password)
@@ -26,7 +30,9 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         //onIdTokenChanged == onAuthStateChanged in Firebase v8. 
         const unsubscribe = onIdTokenChanged(auth, user => {
+            
             setCurrentUser(user);
+            setLoading(false); //sets loading to false
         });
         
         return unsubscribe;
@@ -40,7 +46,8 @@ export function AuthProvider({ children }) {
 
     return (
         <AuthContext.Provider value={value}>
-            {children}
+            {/* If not loading, render 'children' */}
+            { !loading && children}
         </AuthContext.Provider>
     )
 }
