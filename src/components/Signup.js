@@ -36,8 +36,10 @@ export default function Signup() {
       setLoading(true); //loading..
 
       await signup(email, password)
-    } catch  {
-      setError('Failed to create account. Please try again');
+    } catch (e) {
+      (e.code == 'auth/weak-password') 
+      ? setError('Password should be at least 6 characters') 
+      : setError('Sign up failed. Please try again.');
     }
 
     setLoading(false); //loading finished
