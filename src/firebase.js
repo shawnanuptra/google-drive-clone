@@ -1,5 +1,6 @@
 import firebase from  "firebase/app";
 import "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 
 const app = firebase.initializeApp({
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -11,7 +12,7 @@ const app = firebase.initializeApp({
 })
 
 //exports auth for authentication in the app
-export const auth = app.auth();
+export const auth = getAuth(app);
 
 //make firebase.js the default app
 export default app;
