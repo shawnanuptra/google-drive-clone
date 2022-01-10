@@ -1,5 +1,5 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged, onIdTokenChanged } from 'firebase/auth';
-import React, { useContext } from 'react'
+import { createUserWithEmailAndPassword, onIdTokenChanged } from 'firebase/auth';
+import React, { useContext, useState, useEffect } from 'react'
 import { auth } from '../firebase';
 
 //AuthContext, so auth can be used throughout the app
