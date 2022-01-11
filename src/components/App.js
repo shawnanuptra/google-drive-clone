@@ -4,6 +4,7 @@ import { AuthProvider } from "../contexts/AuthContext";
 import Dashboard from "./Dashboard";
 import Signup from "./Signup";
 import Login from "./Login";
+import PrivateRoute from "./PrivateRoute";
 
 function App() {
   return (
@@ -12,7 +13,12 @@ function App() {
         <Router>
           <AuthProvider>
             <Routes>
-              <Route path='/' element={<Dashboard />}></Route>
+              {/* react-router-dom v6 implementation of PrivateRouter */}
+              <Route path='/' element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              }></Route>
               <Route path='/signup' element={<Signup />} ></Route>
               <Route path='/login' element={<Login />} ></Route>
             </Routes>
