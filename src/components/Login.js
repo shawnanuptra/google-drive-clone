@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Button, Card, Form, Alert } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function Login() {
@@ -17,6 +17,8 @@ export default function Login() {
   //loading state, to prevent multiple requests to log in when it's loading
   const [loading, setLoading] = useState(false);
 
+  const history = useNavigate();
+  
   async function handleSubmit(e) {
     //prevents page from loading
     e.preventDefault();
@@ -29,6 +31,9 @@ export default function Login() {
       setLoading(true); //loading..
 
       await login(email, password)
+      
+      //reroute to <Dashboard />
+      history('/');
     } catch (e) {
       (e.code === 'auth/wrong-password') 
       ? setError('Password entered is incorrect. Try again') 

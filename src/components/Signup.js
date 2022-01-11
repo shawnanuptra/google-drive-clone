@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Button, Card, Form, Alert } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function Signup() {
@@ -18,6 +18,7 @@ export default function Signup() {
   //loading state, to prevent multiple requests to sign up when it's loading
   const [loading, setLoading] = useState(false);
 
+  const history = useNavigate();
   async function handleSubmit(e) {
     //prevents page from loading
     e.preventDefault();
@@ -36,7 +37,11 @@ export default function Signup() {
       setError(''); //resets error back to '', so no previous errors are caught
       setLoading(true); //loading..
 
-      await signup(email, password)
+      await signup(email, password);
+
+      
+      //reroute to <Dashboard />
+      history('/');
     } catch (e) {
       (e.code === 'auth/weak-password') 
       ? setError('Password should be at least 6 characters') 
