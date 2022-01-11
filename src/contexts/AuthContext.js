@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, onIdTokenChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, onIdTokenChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import React, { useContext, useState, useEffect } from 'react'
 import { auth } from '../firebase';
 
@@ -35,6 +35,11 @@ export function AuthProvider({ children }) {
         return signOut(auth);
     }
 
+    //password reset function
+    function resetPassword(email) {
+        return sendPasswordResetEmail(auth, email);
+    }
+
     //called everytime component is unmounted
     //unsubscribes the connection to firebase once setCurrentUser() is successfully called
     useEffect(() => {
@@ -53,7 +58,8 @@ export function AuthProvider({ children }) {
         currentUser,
         signup,
         login,
-        logout
+        logout,
+        resetPassword
     }
 
     return (
