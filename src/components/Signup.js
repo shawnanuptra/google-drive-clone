@@ -38,7 +38,7 @@ export default function Signup() {
 
       await signup(email, password)
     } catch (e) {
-      (e.code == 'auth/weak-password') 
+      (e.code === 'auth/weak-password') 
       ? setError('Password should be at least 6 characters') 
       : setError('Sign up failed. Please try again.');
     }

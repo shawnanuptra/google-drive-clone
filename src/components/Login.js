@@ -7,15 +7,14 @@ export default function Login() {
   //declaring refs, so we can access the DOM
   const emailRef = useRef();
   const passwordRef = useRef();
-  const passConfRef = useRef();
 
-  //taking signup() from 
-  const {signup} = useAuth();
+  //taking login() from 
+  const {login} = useAuth();
 
-  //error state, if sign up unsuccessful
+  //error state, if log in unsuccessful
   const [error, setError] = useState('');
 
-  //loading state, to prevent multiple requests to sign up when it's loading
+  //loading state, to prevent multiple requests to log in when it's loading
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
@@ -29,11 +28,11 @@ export default function Login() {
       setError(''); //resets error back to '', so no previous errors are caught
       setLoading(true); //loading..
 
-      await signup(email, password)
+      await login(email, password)
     } catch (e) {
-      (e.code == 'auth/weak-password') 
-      ? setError('Password should be at least 6 characters') 
-      : setError('Sign up failed. Please try again.');
+      (e.code === 'auth/wrong-password') 
+      ? setError('Password entered is incorrect. Try again') 
+      : (e.code === 'auth/user-not-found') ? setError('Account with this email does not exist. Please sign up.') : setError('Log in failed. Please try again.');
     }
 
     setLoading(false); //loading finished
