@@ -32,8 +32,8 @@ export default function Login() {
 
             await login(email, password)
 
-            //reroute to <Dashboard />
-            history('/');
+            //reroute to <Dashboard />, remove loginpage from history
+            history('/', {replace: true});
         } catch (e) {
             (e.code === 'auth/wrong-password')
                 ? setError('Password entered is incorrect. Try again')
