@@ -3,7 +3,7 @@ import { Button, Card, Form, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
-export default function Signup() {
+export default function Login() {
   //declaring refs, so we can access the DOM
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -24,13 +24,6 @@ export default function Signup() {
 
     let email = emailRef.current.value;
     let password = passwordRef.current.value;
-    let passConf = passConfRef.current.value;
-
-    //authenticate password
-    if (password !== passConf) {
-      // "return" will force to exit out of the function execution
-      return setError('Passwords do not match');
-    }
 
     try {
       setError(''); //resets error back to '', so no previous errors are caught
@@ -52,7 +45,7 @@ export default function Signup() {
     <>
       <Card>
         <Card.Body>
-          <h2 className="text-center mb-4">Sign Up</h2>
+          <h2 className="text-center mb-4">Log In</h2>
 
           <Form onSubmit={handleSubmit}>
             {/* if (error = ''), (error &&) will result to false. If the condition is true, the element right after && will appear in the output. If it is false, React will ignore and skip it.,  */}
@@ -66,14 +59,9 @@ export default function Signup() {
               <Form.Label>Password</Form.Label>
               <Form.Control type="password" required ref={passwordRef} />
             </Form.Group>
-
-            <Form.Group id="password-confirm">
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control type="password" required ref={passConfRef} />
-            </Form.Group>
             
             <Button className="w-100 mt-4" type="submit" disabled={loading}>
-              Sign Up
+              Log In
             </Button>
 
           </Form>
@@ -81,7 +69,7 @@ export default function Signup() {
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">
-        Already have an account? <Link to="/login">Log In</Link>
+        Don't have an account yet? <Link to="/signup">Sign up</Link>
       </div>
     </>
   );
