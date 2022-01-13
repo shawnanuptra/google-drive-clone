@@ -1,6 +1,8 @@
 import {initializeApp} from  "firebase/app";
 import "firebase/auth";
 import { getAuth } from "firebase/auth";
+import "firebase/firestore";
+import { collection, getFirestore } from "firebase/firestore";
 
 const app = initializeApp({
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -13,6 +15,15 @@ const app = initializeApp({
 
 //exports auth for authentication in the app
 export const auth = getAuth(app);
+
+//we're not exporting firestore object as a whole, as we don't need a lot of its functionality
+const firestore = getFirestore(app);
+
+// we only export the functionality that we need from firestore
+export const database = {
+    folders: collection(firestore, 'folders'),
+    files: collection(firestore, 'files'),
+}
 
 //make firebase.js the default app
 export default app;
