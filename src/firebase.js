@@ -17,12 +17,15 @@ const app = initializeApp({
 export const auth = getAuth(app);
 
 //we're not exporting firestore object as a whole, as we don't need a lot of its functionality
-const firestore = getFirestore(app);
+export const firestore = getFirestore(app);
 
 // we only export the functionality that we need from firestore
 export const database = {
     folders: collection(firestore, 'folders'),
     files: collection(firestore, 'files'),
+    formatDoc: doc => {
+        return {id: doc.id, ...doc.data()}
+    }
 }
 
 //make firebase.js the default app
