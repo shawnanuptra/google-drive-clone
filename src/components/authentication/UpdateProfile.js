@@ -49,7 +49,7 @@ export default function UpdateProfile() {
 
         //resolve all promises at once
         Promise.all(promises).then( () => {
-            history('/');
+            history('/user');
         }).catch( (e) => {
             (e.code === 'auth/weak-password')
                 ? setError('Password should be at least 6 characters')
@@ -93,7 +93,7 @@ export default function UpdateProfile() {
                 </Card.Body>
             </Card>
             <div className="w-100 text-center mt-2">
-                <Link to="/">Cancel</Link>
+                <Link to="/user">Cancel</Link>
             </div>
         </CenteredContainer>
     );
