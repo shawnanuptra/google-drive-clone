@@ -6,6 +6,7 @@ import Login from "./authentication/Login";
 import PrivateRoute from "./authentication/PrivateRoute";
 import ForgotPassword from "./authentication/ForgotPassword";
 import UpdateProfile from "./authentication/UpdateProfile";
+import Dashboard from "./google-drive/Dashboard";
 
 function App() {
   return (
@@ -15,7 +16,11 @@ function App() {
         <Routes>
 
           {/* Drive */}
-
+          <Route path='/' element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }></Route>
           {/* Profile */}
           {/* react-router-dom v6 implementation of PrivateRouter */}
           <Route path='/user' element={
