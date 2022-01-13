@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Button, Card, Form, Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function Signup() {
   //declaring refs, so we can access the DOM
