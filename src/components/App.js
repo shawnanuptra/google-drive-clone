@@ -21,6 +21,11 @@ function App() {
               <Dashboard />
             </PrivateRoute>
           }></Route>
+          <Route path='/folder/:folderID' element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }></Route>
           {/* Profile */}
           {/* react-router-dom v6 implementation of PrivateRouter */}
           <Route path='/user' element={
