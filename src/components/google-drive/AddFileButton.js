@@ -5,7 +5,7 @@ import { database, storage } from '../../firebase';
 import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
 import { useAuth } from '../../contexts/AuthContext';
 import { ROOT_FOLDER } from '../../hooks/useFolder';
-import { addDoc, serverTimestamp } from 'firebase/firestore';
+import { addDoc, getDoc, getDocs, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import { v4 as uuidV4 } from 'uuid';
 import ReactDom from 'react-dom';
 import { Toast, ProgressBar } from 'react-bootstrap';
@@ -38,7 +38,7 @@ export default function AddFileButton({ currentFolder }) {
             setUploadingFiles(prevUploadingFiles => {
                 return prevUploadingFiles.map(uploadFile => {
                     if (uploadFile.id === id) {
-                        return {...uploadFile, progress: progress}
+                        return { ...uploadFile, progress: progress }
                     }
 
                     return uploadFile
@@ -46,9 +46,9 @@ export default function AddFileButton({ currentFolder }) {
             })
         }, () => {
             setUploadingFiles(prevUploadingFiles => {
-                return prevUploadingFiles.map( uploadFile => {
+                return prevUploadingFiles.map(uploadFile => {
                     if (uploadFile.id === id) {
-                        return {...uploadFile, error: true}
+                        return { ...uploadFile, error: true }
                     }
 
                     return uploadFile;
@@ -63,14 +63,27 @@ export default function AddFileButton({ currentFolder }) {
             })
 
 
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                addDoc(database.files, {
-                    url: downloadURL,
-                    name: file.name,
-                    createdAt: serverTimestamp(),
-                    folderID: currentFolder.id,
-                    userID: currentUser.uid
-                })
+            getDownloadURL(uploadTask.snapshot.ref).then( async (downloadURL) => {
+
+                //check if there's duplicate file name
+                const q = query(database.files, where("name", "==", file.name), where('userID', '==', currentUser.uid), where('folderID', '==', currentFolder.id))
+
+                const querySnapshot = await getDocs(q);
+                const existingFile = querySnapshot.docs[0]
+                if (existingFile) {
+                    updateDoc(existingFile.ref, { url: downloadURL })
+                } else {
+
+                    // If there's no duplicates, just add file
+                    addDoc(database.files, {
+                        url: downloadURL,
+                        name: file.name,
+                        createdAt: serverTimestamp(),
+                        folderID: currentFolder.id,
+                        userID: currentUser.uid
+                    })
+                }
+
             });
 
         })
@@ -92,7 +105,7 @@ export default function AddFileButton({ currentFolder }) {
                     }}
                 >
                     {uploadingFiles.map(file => (
-                        <Toast key={file.id} onClose={ () => {
+                        <Toast key={file.id} onClose={() => {
                             setUploadingFiles(prevUploadingFiles => {
                                 return prevUploadingFiles.filter(uploadFile => {
                                     return uploadFile.id !== file.id
@@ -104,7 +117,7 @@ export default function AddFileButton({ currentFolder }) {
                             </Toast.Header>
                             <Toast.Body>
                                 <ProgressBar
-                                animated={!file.error}
+                                    animated={!file.error}
                                     variant={file.error ? 'danger' : 'primary'}
                                     now={file.error ? 100 : file.progress * 100}
                                     label={
