@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Shawn's Drive",
+  "name": "Shawn's Drive, created with React and Firebase",
   "icons": [
     {
       "src": "favicon.ico",
