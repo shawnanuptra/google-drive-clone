@@ -9,7 +9,8 @@ import { database, firestore } from "../firebase"
 const ACTIONS = {
     SELECT_FOLDER: 'select-folder',
     UPDATE_FOLDER: 'update-folder',
-    SET_CHILD_FOLDERS: 'set-child-folders'
+    SET_CHILD_FOLDERS: 'set-child-folders',
+    SET_CHILD_FILES: 'set-child-files',
 }
 
 //Root folder object
@@ -39,6 +40,11 @@ function reducer(state, { type, payload }) {
             return {
                 ...state,
                 childFolders: payload.childFolders
+            }
+        case ACTIONS.SET_CHILD_FILES:
+            return {
+                ...state,
+                childFiles: payload.childFiles
             }
         default:
             return state;
@@ -111,6 +117,25 @@ export function useFolder(folderID = null, folder = null) {
                 type: ACTIONS.SET_CHILD_FOLDERS,
                 payload: {
                     childFolders: querySnapshot.docs.map(database.formatDoc)
+                }
+            })
+        });
+
+        return unsubscribe;
+
+    }, [folderID, currentUser])
+
+    //triggered when childFiles is added
+    useEffect(async () => {
+
+
+        const q = query(database.files, where('folderID', "==", folderID), where("userID", "==", currentUser.uid), orderBy('createdAt'));
+
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            dispatch({
+                type: ACTIONS.SET_CHILD_FILES,
+                payload: {
+                    childFiles: querySnapshot.docs.map(database.formatDoc)
                 }
             })
         });
